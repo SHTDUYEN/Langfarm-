@@ -79,7 +79,8 @@ body {
     line-height: 1.5;
     color: #212529;
     text-align: left;
-    background-image: url("../img/bg-2.png");
+    background: url("../img/bg.jpg");
+    /* background: url(img_tree.gif) left top no-repeat, url(img_flwr.gif) right bottom no-repeat, url(paper.gif) left top repeat; */
 }
 
 [tabindex="-1"]:focus:not(:focus-visible) {
@@ -10421,6 +10422,7 @@ td {
 .btn-create {
     padding: 15px 30px;
     background-color: rgba(91, 143, 255, 0.699);
-    margin-right: 0;
+    margin: 30px 0 0 1320px;
     border-radius: 10px;
+    float: right;
 }

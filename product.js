@@ -4,6 +4,9 @@ let menu = document.getElementById("menu");
 let categories = document.getElementById("categories");
 let products;
 let cate;
+var shoppingCartItems = [];
+let total = 0;
+let cart = document.getElementById("cart");
 async function load() {
     let productsFetch = await fetch(linkProduct);
     let categooriesFetch = await fetch(linkCategories);
@@ -13,6 +16,15 @@ async function load() {
     menu.innerHTML = "";
     menu.innerHTML = createProduct(products);
     categories.innerHTML = createCategories(cate);
+    if (sessionStorage["shopping-cart-items"] != null) {
+        shoppingCartItems = JSON.parse(sessionStorage["shopping-cart-items"].toString());
+        if (shoppingCartItems.length > 0) {
+            for (item of shoppingCartItems) {
+                total += item.quantityOrder;
+            }
+
+        }
+    }
     // console.log(createProduct(products));
 }
 
@@ -71,5 +83,60 @@ function showmodal(id) {
             break;
         }
     }
+}
+var productOrder = {
+    id: "",
+    name: "",
+    image: "",
+    priceBase: 0,
+    size: "",
+    indexSize: -1,
+    priceSize: 0,
+    topping: [],
+    note: "",
+    quantityOrder: 1,
+
+
+
+};
+
+function add_to_cart() {
+    let isExist = false;
+
+    for (index in shoppingCartItems) {
+
+        if (productOrder.id == shoppingCartItems[index].id) {
+            let item = {};
+            isExist = true;
+            total -= shoppingCartItems[index].quantityOrder;
+            item = JSON.parse(JSON.stringify(productOrder));
+            total += productOrder.quantityOrder;
+            shoppingCartItems.slice(index, 1, item);
+            break;
+        }
+    }
+
+    if (isExist == false) {
+
+        shoppingCartItems.push(JSON.parse(JSON.stringify(productOrder)));
+        for (item of shoppingCartItems) {
+            console.log(item.name);
+        }
+        total += productOrder.quantityOrder;
+    }
+    // Lưu thông tin vào sessionStorage
+    sessionStorage["shopping-cart-items"] = JSON.stringify(shoppingCartItems); // Chuyển thông tin mảng shoppingCartItems sang JSON trước khi lưu vào sessionStorage
+
+    // Gọi hàm hiển thị giỏ hàng
+    modal.style.display = "none";
+    displayShoppingCartItems();
+}
+
+function displayShoppingCartItems() {
+
+    cart.innerHTML = total;
+
+
+
 }
 load();

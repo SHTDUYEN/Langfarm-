@@ -2,16 +2,18 @@ const linkProduct = "http://localhost:8080/api/products?size=100";
 const linkCategories = "http://localhost:8080/api/categories";
 let menu = document.getElementById("menu");
 let categories = document.getElementById("categories");
+let products;
+let cate;
 async function load() {
     let productsFetch = await fetch(linkProduct);
     let categooriesFetch = await fetch(linkCategories);
 
-    let products = await productsFetch.json();
-    let cate = await categooriesFetch.json();
+    products = await productsFetch.json();
+    cate = await categooriesFetch.json();
     menu.innerHTML = "";
     menu.innerHTML = createProduct(products);
     categories.innerHTML = createCategories(cate);
-    console.log(createProduct(products));
+    // console.log(createProduct(products));
 }
 
 function createProduct(listProduct) {
@@ -29,9 +31,9 @@ function createProduct(listProduct) {
         // stringHTML += "<img class =\"img\" src=\"" + image + "\">";
         stringHTML += "<div class=\"desc\">";
         stringHTML += "<p class=\"meta-prod d-flex\">";
-        stringHTML += "                <a href=\"\" class=\"d-flex align-items-center justify-content-center\"><span class=\"flaticon-shopping-bag\"></span></a>";
-        stringHTML += "      <a href=\"\" class=\"d-flex align-items-center justify-content-center\"><span class=\"flaticon-heart\"></span></a>";
-        stringHTML += "     <a href=\"\" class=\"d-flex align-items-center justify-content-center\"><span class=\"flaticon-visibility\"></span></a>";
+        stringHTML += "                <button type=\"button\" class=\"btn btn-primary d-flex align-items-center justify-content-center\" data-toggle=\"modal\" data-target=\"#staticBackdrop\"><span class=\"flaticon-shopping-bag\"></span></button>";
+        stringHTML += "      <button type=\"button\" class=\"btn btn-primary d-flex align-items-center justify-content-center\" data-toggle=\"modal\" data-target=\"#staticBackdrop\"><span class=\"flaticon-heart\"></span></button>";
+        stringHTML += "<button type=\"button\" class=\"btn btn-primary d-flex align-items-center justify-content-center\" onclick=\"showmodal(" + ob.id + ")\" data-toggle=\"modal\" data-target=\"#staticBackdrop\"><span class=\"flaticon-visibility\"></span></button>";
         stringHTML += " </p>";
         stringHTML += "</div>";
         stringHTML += "</div>";
@@ -54,5 +56,20 @@ function createCategories(listCategories) {
         stringHTML += "<li><a href=\"\">" + ob.name + "  <span class=\"fa fa-chevron-right\"></span></a></li>";
     }
     return stringHTML;
+}
+
+function showmodal(id) {
+
+    for (const ob of products) {
+        // console.log(ob);
+        if (ob.id == id) {
+            console.log(ob);
+            document.getElementById("modalimg").setAttribute("src", ob.imageUrl);
+            document.getElementById("staticBackdropLabel").innerHTML = ob.name;
+            document.getElementById("description").innerHTML = ob.description;
+            document.getElementById("modalprice").innerHTML = ob.price;
+            break;
+        }
+    }
 }
 load();
